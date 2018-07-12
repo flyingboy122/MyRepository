@@ -10,7 +10,7 @@
 			(select nvl(projecttitle,'아이템명 지정오류') from project_outline e where a.projectno = e.projectno ) as "projecttitle",
 			(select email from project_outline f where a.projectno = f.projectno) as "projectwriter",
  			b.ITEMNAME,
- 			b.ITEMNUM,
+ 			nvl(b.ITEMNUM,'0') as itemnum,
  			b.deliveryyn
 		from support a 
 		join delivery b on a.supportno = b.supportno
@@ -40,7 +40,7 @@
 	</update>
 	
 	<select  id="selectGiveList" resultType="giveGift">
-	select p.* , de.address, de.postnum, de.itemname, de.itemNum, de.deliveryyn,
+	select p.* , de.address, de.postnum, de.itemname, nvl(de.itemNum,'0') as "itemnum", de.deliveryyn,
 	(select  to_char(calculateduedate + 2,'YYYY-MM-dd') from project_funding fun where p.PROJECTNO = fun.projectno) as "deliveryduedate"
       from
       ( select a.projectno, a.email as "projectwriter", a.projecttitle, a.projectconfirmyn, b.supportno,
